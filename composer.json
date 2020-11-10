@@ -1,0 +1,42 @@
+{
+  "name": "broosaction/litebase-sdk-php",
+  "homepage": "http://cloud.litebase.xyz/sdkforphp",
+  "description": "litebase SDK for PHP - Use litebase Web Services in your PHP project",
+  "keywords": ["lit","litebase","broosaction","charts","store","ai","cloud","endpoints"],
+  "type": "library",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "Litebase cloud Services",
+      "homepage": "http://cloud.litebase.xyz"
+    }
+  ],
+  "support": {
+    "forum": "https://forum.litebase.xyz/sdkforphp",
+    "issues": "https://github.com/broosaction/litebase-sdk-php/issues"
+  },
+  "require": {
+    "php": "~7.4",
+    "ext-pcre": "*",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "ext-openssl": "*",
+    "ext-dom": "*"
+  },
+  "suggest": {
+    "ext-openssl": "Allows working with Cloud's private distributions and verifying received messages",
+    "ext-curl": "To send requests using cURL",
+    "doctrine/cache": "To use the DoctrineCacheAdapter"
+  },
+  "autoload": {
+    "psr-4": {
+      "Litebase\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Litebase\\Test\\": "tests/"
+    }
+  }
+}
