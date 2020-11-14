@@ -428,7 +428,8 @@ class Request
             //CURLOPT_SSL_VERIFYHOST accepts only 0 (false) or 2 (true). Future versions of libcurl will treat values 1 and 2 as equals
             CURLOPT_SSL_VERIFYHOST => self::$verifyHost === false ? 0 : 2,
             // If an empty string, '', is set, a header containing all supported encoding types is sent
-            CURLOPT_ENCODING => ''
+            CURLOPT_ENCODING => '',
+            CURLOPT_CAINFO => __DIR__ . '/cacert.pem'
         ];
         if ($method === Method::POST) {
             $curl_base_options[CURLOPT_POST]=true;

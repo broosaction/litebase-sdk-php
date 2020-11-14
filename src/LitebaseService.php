@@ -46,7 +46,7 @@ class LitebaseService
         $bearerTkn = $this->client->getClient_id();
         $headers = array(
             'Content-Type' => 'application/json',
-            'Authorization' => $bearerTkn,
+            'authorization' => $bearerTkn,
             'user-agent' => $this->client::USER_AGENT,
             'username' => $this->client->getConfig()['username'],
         );
@@ -83,7 +83,7 @@ class LitebaseService
      */
     protected function execute(array $options, $encrypt = true, $requestType = Method::POST): Response
     {
-
+        $bearerTkn = $this->client->getClient_id();
         if ($encrypt) {
             //encrypt the required options to pass to the server
             $crypt = new Crypt($this->client);
@@ -94,6 +94,7 @@ class LitebaseService
                 'encrypted' => 1,
                 'target_api' => $this->client->getTarget_api(),
                 'application_name' => $this->client->getApplication_name(),
+                'authorization' => $bearerTkn,
             );
 
         } else {
@@ -103,6 +104,7 @@ class LitebaseService
                 'encrypted' => 0,
                 'target_api' => $this->client->getTarget_api(),
                 'application_name' => $this->client->getApplication_name(),
+                'authorization' => $bearerTkn,
             );
 
         }
