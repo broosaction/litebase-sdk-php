@@ -13,15 +13,23 @@ use Litebase\Common\Http\Response;
 
 class LitebaseService
 {
+    protected $hasExected;
+    /**
+     * @var mixed
+     */
+    protected array $oldData;
 
     protected $endpoint;
     protected $version;
     protected $rootUrl;
+    protected $encrypt = true;
     protected $servicePath;
     protected $availableScopes;
     protected $serviceName;
     protected $resource;
     protected $client;
+    protected $newData;
+
     private $data;
 
     public function __construct(LitebaseClient $client)
@@ -72,6 +80,9 @@ class LitebaseService
             $response = Request::post($url, $headers, $body);
         }
 
+        $this->newData = json_decode($response->raw_body, false, 512, JSON_THROW_ON_ERROR);
+        $this->hasExected = true;
+
         return $response;
     }
 
@@ -84,7 +95,7 @@ class LitebaseService
     protected function execute(array $options, $encrypt = true, $requestType = Method::POST): Response
     {
         $bearerTkn = $this->client->getClient_id();
-        if ($encrypt) {
+        if ($encrypt && $this->encrypt) {
             //encrypt the required options to pass to the server
             $crypt = new Crypt($this->client);
             $this->integrityHash = $crypt->encryption($options);
@@ -114,6 +125,42 @@ class LitebaseService
         return $this->do($requestType);
 
     }
+
+
+  public function getMessage(){
+
+      return ($this->newData->message ?? $this->newData->data) ?? 'no message';
+
+  }
+
+
+    public function getProject(): ?string
+    {
+        if ($this->hasExected) {
+            if ($this->newData->status === true) {
+                return $this->newData->project;
+            }
+        }
+        $this->execute($this->oldData);
+        return $this->getProject();
+    }
+
+
+    /**
+     * @return mixed
+     * @throws \JsonException
+     */
+    public function getStatus(): ?bool
+    {
+        if ($this->hasExected) {
+
+            return $this->newData->status ?? false;
+
+        }
+        $this->execute($this->oldData);
+        return $this->getStatus();
+    }
+
 
 
 }
