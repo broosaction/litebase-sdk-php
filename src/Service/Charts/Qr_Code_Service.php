@@ -14,20 +14,12 @@ class Qr_Code_Service extends LitebaseService
 {
 
 
-    private $hasExected;
-    /**
-     * @var mixed
-     */
-    private $newData;
-    private array $oldData;
-
     public function __construct(LitebaseClient $client)
     {
         parent::__construct($client);
         $this->endpoint = '/api/charts/qr';
-        $this->rootUrl = 'http://brooshost:8081/cloud/';
+        $this->rootUrl = 'http://brooshost:8081/cloud';
         $this->version = 'v1';
-
         $this->oldData = array();
 
     }
@@ -95,39 +87,11 @@ class Qr_Code_Service extends LitebaseService
         return $this->getServiceName();
     }
 
-    public function getProject(): ?string
-    {
-        if ($this->hasExected) {
-            if ($this->newData->status === true) {
-                return $this->newData->project;
-            }
-        }
-        $this->_execute();
-        return $this->getProject();
-    }
-
-
-    /**
-     * @return mixed
-     * @throws \JsonException
-     */
-    public function getStatus(): ?bool
-    {
-        if ($this->hasExected) {
-
-            return $this->newData->status ?? false;
-
-        }
-        $this->_execute();
-        return $this->getStatus();
-    }
-
 
     private function _execute()
     {
         if (isset($this->oldData['text'])) {
-            $this->newData = json_decode($this->execute($this->oldData)->raw_body, false, 512, JSON_THROW_ON_ERROR);
-            $this->hasExected = true;
+           $this->execute($this->oldData);
         } else {
             throw new Exception('QR code data not set, at least set the Qr code text.');
         }
