@@ -18,7 +18,7 @@ class Qr_Code_Service extends LitebaseService
     {
         parent::__construct($client);
         $this->endpoint = '/api/charts/qr';
-        $this->rootUrl = 'http://brooshost:8081/cloud';
+        $this->rootUrl = 'https://cloud.broos.link';
         $this->version = 'v1';
         $this->oldData = array();
 
