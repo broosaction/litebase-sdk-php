@@ -13,7 +13,7 @@ use Litebase\Common\Http\Response;
 
 class LitebaseService
 {
-    protected $hasExected;
+    public $hasExected;
     /**
      * @var mixed
      */
@@ -28,7 +28,7 @@ class LitebaseService
     protected $serviceName;
     protected $resource;
     protected $client;
-    protected $newData;
+    public $newData;
 
     private $data;
 
@@ -159,6 +159,14 @@ class LitebaseService
         }
         $this->execute($this->oldData);
         return $this->getStatus();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRootUrl()
+    {
+        return $this->rootUrl;
     }
 
 
