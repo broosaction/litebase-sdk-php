@@ -8,17 +8,21 @@
   "authors": [
     {
       "name": "Litebase cloud Services",
-      "homepage": "http://cloud.litebase.xyz"
+      "homepage": "http://cloud.broos.link"
     }
   ],
   "support": {
-    "forum": "https://forum.litebase.xyz/sdkforphp",
+    "forum": "https://broos.link",
     "issues": "https://github.com/broosaction/litebase-sdk-php/issues"
   },
   "require": {
-    "php": "~7.4",
+    "php": ">=7.4",
     "ext-pcre": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "psr/http-message": "^1.0",
+    "nette/caching": "^3.0.2",
+    "mtdowling/jmespath.php": "^2.3",
+    "ext-curl": "*"
   },
   "require-dev": {
     "ext-openssl": "*",
