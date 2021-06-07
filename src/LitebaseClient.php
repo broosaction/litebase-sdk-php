@@ -8,7 +8,7 @@ class LitebaseClient
     const LIBVER = "0.1.2";
     const USER_AGENT = "litebase-api-php-client " .self::LIBVER;
     const OAUTH2_AUTH_URL = '';
-    const API_BASE_PATH = 'http://broos.cloud';
+    const API_BASE_PATH = 'https://cloud.broos.link';
 
     /**
      * @var array

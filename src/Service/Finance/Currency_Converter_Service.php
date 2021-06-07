@@ -18,7 +18,7 @@ class Currency_Converter_Service extends LitebaseService
     {
         parent::__construct($client);
         $this->endpoint = '/api/finance/converter';
-        $this->rootUrl = 'http://broos.cloud';
+        $this->rootUrl = 'https://cloud.broos.link';
         $this->version = 'v1';
         $this->oldData = array();
     }
@@ -85,15 +85,6 @@ class Currency_Converter_Service extends LitebaseService
         return $this->getCurrency();
     }
 
-    private function _execute(): void
-    {
-        if (isset($this->oldData['from'])) {
-            $this->execute($this->oldData);
-        } else {
-            throw new Exception('Currency converter amount not set.');
-        }
-    }
-
     /**
      * @return mixed
      * @throws \JsonException
@@ -109,6 +100,16 @@ class Currency_Converter_Service extends LitebaseService
         }
         $this->_execute();
         return $this->getAmount();
+    }
+
+
+    private function _execute(): void
+    {
+        if (isset($this->oldData['from'])) {
+            $this->execute($this->oldData);
+        } else {
+            throw new Exception('Currency converter amount not set.');
+        }
     }
 
 
