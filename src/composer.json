@@ -1,6 +1,6 @@
 {
   "name": "broosaction/litebase-sdk-php",
-  "homepage": "http://cloud.litebase.xyz/sdkforphp",
+  "homepage": "https://cloud.broos.link/sdk/php",
   "description": "litebase SDK for PHP - Use litebase Web Services in your PHP project",
   "keywords": ["lit","litebase","broosaction","charts","store","ai","cloud","endpoints"],
   "type": "library",
@@ -22,7 +22,8 @@
     "psr/http-message": "^1.0",
     "nette/caching": "^3.0.2",
     "mtdowling/jmespath.php": "^2.3",
-    "ext-curl": "*"
+    "ext-curl": "*",
+    "ext-openssl": "*"
   },
   "require-dev": {
     "ext-openssl": "*",
