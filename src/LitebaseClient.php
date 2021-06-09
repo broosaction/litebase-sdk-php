@@ -15,7 +15,6 @@ class LitebaseClient
      */
     private array $config;
 
-
     /**
      * LitebaseClient constructor.
      * @param array $config
