@@ -8,6 +8,7 @@ namespace Litebase\Common\Crypto;
 use Exception;
 use Litebase\Common\Exception\InvalidArgumentException;
 use Litebase\LitebaseClient;
+use phpseclib\Crypt\Hash;
 
 class Crypt
 {
@@ -20,6 +21,8 @@ class Crypt
     protected $options = 0;
 
     private $iv;
+
+    private $isSecureRandom = true;
 
 
     /**
@@ -65,7 +68,7 @@ class Crypt
      * @param string $mode
      * @throws Exception
      */
-    public function setMethod($blockSize, $mode = 'CBC'): void
+    protected function setMethod($blockSize, $mode = 'CBC'): void
     {
         if ($blockSize === 192 && in_array('', array('CBC-HMAC-SHA1', 'CBC-HMAC-SHA256', 'XTS'))) {
             $this->method = null;
@@ -91,10 +94,11 @@ class Crypt
     protected function getIV(): string
     {
 
-        $this->iv = random_bytes(12);
-        if ($this->iv === false) {
-            $this->iv = bin2hex($this->generate(12));
+        $this->iv = openssl_random_pseudo_bytes(16, $this->isSecureRandom);
+        if($this->iv === false || $this->isSecureRandom === false){
+            $this->iv = bin2hex($this->generate(8));
         }
+
         return $this->iv;
 
     }
@@ -134,7 +138,8 @@ class Crypt
         // Append an "a" behind the password and hash it to prevent reusing the same password as for encryption
         $password = hash('sha512', $password . 'a');
 
-        $hash = new Hasher($password);
+        $hash = new Hash('sha512');
+        $hash->setKey($password);
         return $hash->hash($message);
     }
 
@@ -143,9 +148,8 @@ class Crypt
      * @return string
      * @throws Exception
      */
-    public function encrypt(): string
+    protected function encrypt(): string
     {
-
         if ($this->validateParams()) {
             return openssl_encrypt($this->data, $this->method, $this->getKey(), $this->options, $this->getIV());
         }
@@ -156,7 +160,7 @@ class Crypt
     /**
      * @return string
      */
-    public function decrypt(): string
+    protected function decrypt(): string
     {
         if ($this->validateParams()) {
             return openssl_decrypt($this->data, $this->method, $this->getKey(), $this->options, $this->iv);
@@ -177,17 +181,17 @@ class Crypt
      * @return string
      * @throws \JsonException
      */
-
     public function encryption(array $options)
     {
         $this->data = json_encode($options, JSON_THROW_ON_ERROR);
         //encode the data
         $dat = $this->encrypt();
         $response = json_encode([
-            'data' => $dat,
-            'iv' => $this->iv,
-            'hash' => $this->calculateHMAC($dat.$this->iv, $this->client->getClient_secret())
+            'data'  => base64_encode($dat),
+            'iv'    => base64_encode($this->iv),
+            'hash'  => base64_encode($this->calculateHMAC($dat . $this->iv, $this->client->getClient_secret())),
         ], JSON_THROW_ON_ERROR);
+
         return base64_encode($response);
     }
 
@@ -195,9 +199,9 @@ class Crypt
     {
         $payload = base64_decode($options);
         $payload = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);
-        $this->iv = $payload['iv'];
-        $this->data = $payload['data'];
-        if (!hash_equals($this->calculateHMAC($this->data.$this->iv, $this->client->getClient_secret()), $payload['hash'])) {
+        $this->iv = base64_decode($payload['iv']);
+        $this->data = base64_decode($payload['data']);
+        if (!hash_equals($this->calculateHMAC($this->data.$this->iv, $this->client->getClient_secret()), base64_decode($payload['hash']))) {
             throw new InvalidArgumentException('HMAC does not match.');
         }
         $dat = $this->decrypt();
