@@ -50,9 +50,10 @@ class LitebaseService
 
     private function do($type = Method::POST): Response
     {
-        // make request to endpoint
 
+        // make request to endpoint
         $bearerTkn = $this->client->getClient_id();
+
         $headers = array(
             'Content-Type' => 'application/json',
             'authorization' => $bearerTkn,
@@ -60,8 +61,6 @@ class LitebaseService
             'username' => $this->client->getConfig()['username'],
         );
 
-
-        // the
         //$body = $this->data;
         $body = Body::Json($this->data);
 
@@ -97,9 +96,9 @@ class LitebaseService
     {
         $bearerTkn = $this->client->getClient_id();
         if ($encrypt && $this->encrypt) {
+
             //encrypt the required options to pass to the server
-            $crypt = new Crypt($this->client);
-            $this->integrityHash = $crypt->encryption($options);
+            $this->integrityHash = (new Crypt($this->client))->encryption($options);
 
             $this->data = array(
                 'data' => $this->integrityHash,
@@ -121,26 +120,28 @@ class LitebaseService
 
         }
 
-
         // the result returned requires validation
         return $this->do($requestType);
 
     }
 
 
-  public function getMessage(){
+    /**
+     * gets the generic message, could be an error too
+     * @return string
+     */
+    public function getMessage()
+    {
 
-      return ($this->newData->message ?? $this->newData->data) ?? 'no message';
+        return ($this->newData->message ?? $this->newData->data) ?? 'no message';
 
-  }
+    }
 
 
     public function getProject(): ?string
     {
-        if ($this->hasExected) {
-            if ($this->newData->status === true) {
-                return $this->newData->project;
-            }
+        if ($this->hasExected && $this->newData->status === true) {
+            return $this->newData->project;
         }
         $this->execute($this->oldData);
         return $this->getProject();
@@ -169,7 +170,6 @@ class LitebaseService
     {
         return $this->rootUrl;
     }
-
 
 
 }
