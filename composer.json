@@ -1,6 +1,6 @@
 {
   "name": "broosaction/sdk",
-  "homepage": "https://cloud.broos.link",
+  "homepage": "https://cloud.broos.link/sdk/php",
   "description": "litebase SDK for PHP - Use litebase Web Services in your PHP project",
   "keywords": ["lit","litebase","broosaction","charts","store","ai","cloud","endpoints"],
   "type": "library",
