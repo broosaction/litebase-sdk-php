@@ -46,7 +46,7 @@ class Crypt
     {
         $key = $this->client->getClient_secret();
 
-        $hashedkey = md5($key);
+        $hashedkey = hash('SHA512', $key, false);
         $hashedkeylast12 = substr($hashedkey, -8);
         $seckeyadjusted = str_replace(".", "", $key);
         $seckeyadjustedfirst12 = substr($seckeyadjusted, 0, 8);
