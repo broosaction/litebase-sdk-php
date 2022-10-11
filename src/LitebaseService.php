@@ -80,9 +80,10 @@ class LitebaseService
             $response = Request::post($url, $headers, $body);
         }
 
+
         $this->newData = json_decode($response->raw_body, false, 512, JSON_THROW_ON_ERROR);
         $this->hasExected = true;
-
+       
         return $response;
     }
 
@@ -133,7 +134,12 @@ class LitebaseService
     public function getMessage()
     {
 
-        return ($this->newData->message ?? $this->newData->data) ?? 'no message';
+        if($this->newData->message !== null){
+            return $this->newData->message;
+        }
+
+
+        return $this->newData->data ?? 'no message';
 
     }
 
