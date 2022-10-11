@@ -210,6 +210,7 @@ class ApiClient
         $headers = $options['headers'] ?? [];
         $headers['Content-Type'] = 'application/json';
         $headers['authorization'] = $this->client->getClient_id();
+        $headers['Authorization'] = $this->client->getClient_id();
         $headers['user-agent'] = $this->client::USER_AGENT;
         $headers['username'] = $this->client->getConfig()['username'];
 
@@ -238,6 +239,7 @@ class ApiClient
             $response = Request::patch($uri, $headers, $reqbody);
         }
 
+       
 
         return $response;
     }
